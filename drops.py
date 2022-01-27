@@ -4,7 +4,6 @@ from pygame.sprite import Sprite
 from pygame.sprite import Group
 from random import randint
 
-
 screen_width = 1400
 screen_height = 800
 
@@ -19,21 +18,17 @@ class ADrop(Sprite):
         self.rect.y = self.rect.top
         self.x = float(self.rect.x)
         self.y = float(self.rect.y)
-        #self.drop_speed_factor = 10
         
     def blitme(self):
         self.screen.blit(self.image, self.rect)
-
 
 def run_game():
     pygame.init()
     screen = pygame.display.set_mode((screen_width, screen_height))
     pygame.display.set_caption("Raindrops")
-    a_drop = ADrop(screen)
     drops = Group()
     create_window(screen, drops)
     random_drop(screen, drops)
-    
     
     while True:
         for event in pygame.event.get():
@@ -41,17 +36,12 @@ def run_game():
                 sys.exit()
 
         screen.fill((70, 130, 180))
-        #a_drop.blitme()
         run_drop(screen, drops)
         drops.draw(screen)
         for drop in drops.copy():
             if drop.rect.top > screen_height:
                 drop.y = 0
                 drop.rect.bottom = drop.y
-                #drops.remove(drop)
-            #create_window(screen, drops)
-            print(len(drops))
-        #rint(number_rows)
         
         pygame.display.flip()
 
@@ -61,7 +51,6 @@ def create_window(screen, drops):
     available_space_x = screen_width - 2 * a_drop_width
     number_drops_x = int(available_space_x / (7 * a_drop_width))
     number_rows = get_number_rows(screen, a_drop.rect.height)
-    print(number_rows)
     for row_number in range(number_rows):
         for a_drop_number in range(number_drops_x):
             a_drop = ADrop(screen)
@@ -70,7 +59,6 @@ def create_window(screen, drops):
             a_drop.rect.y = (a_drop.rect.height
                             + 2 * a_drop.rect.height * row_number)
             drops.add(a_drop)
-            #print(len(drops))
 
 def get_number_rows(screen, a_drop_height):
     available_space_y = screen_height - a_drop_height
@@ -80,7 +68,7 @@ def get_number_rows(screen, a_drop_height):
 def random_drop(screen, drops):
     """ Случайное смещешие капель по х."""
     for misaligned_a_drop in drops.sprites():
-        misaligned_a_drop.x = misaligned_a_drop.rect.x + randint(-30, 30)
+        misaligned_a_drop.x = misaligned_a_drop.rect.x + randint(-100, 100)
         misaligned_a_drop.rect.x = misaligned_a_drop.x
         misaligned_a_drop.y = misaligned_a_drop.rect.y + randint(-30, 30)
         misaligned_a_drop.rect.y = misaligned_a_drop.y 
@@ -90,6 +78,5 @@ def run_drop(screen, drops):
     for misaligned_a_drop in drops.sprites():
         misaligned_a_drop.y = misaligned_a_drop.rect.y + randint(0, 3)
         misaligned_a_drop.rect.y = misaligned_a_drop.y 
-
 
 run_game()
